@@ -14,10 +14,7 @@ export const resolvers = {
       _info: any,
     ) =>
       prisma.user.findUnique({ where: { email: context.session.user.email } }),
-    getPolls: async (parent, args, context, info) => {
-      console.log(`hello world`);
-      return prisma.poll.findMany();
-    },
+    getPolls: async (parent, args, context, info) => prisma.poll.findMany(),
   },
   Mutation: {
     createPoll: async (_parent: any, args: any, context: any, _info: any) =>
