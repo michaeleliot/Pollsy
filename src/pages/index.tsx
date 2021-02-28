@@ -1,13 +1,13 @@
 import { signIn, signOut, useSession } from 'next-auth/client';
 import { useQuery } from '@apollo/client';
-import { GET_USER } from '../components/graphql/user';
+import { GET_POLLS } from '../components/graphql/queries';
 
 export default function Page() {
   const [session, sessionLoading] = useSession();
-  const { loading, error, data } = useQuery(GET_USER);
+  const { loading, error, data } = useQuery(GET_POLLS);
 
-  if (error) return <div>Error getting user.</div>;
-  if (loading) return <div>Loading</div>;
+  if (error) return <div>Error getting polls.</div>;
+  if (loading || sessionLoading) return <div>Loading</div>;
 
   return (
     <>
