@@ -1,13 +1,18 @@
 import { ApolloServer, gql } from 'apollo-server-micro';
 import { PrismaClient } from '@prisma/client';
 import { getSession } from 'next-auth/client';
-import { exception } from 'console';
 
 const prisma = new PrismaClient();
 
 export const resolvers = {
   Query: {
-    getUsers: async (parent, args, context, info) => prisma.user.findMany(),
+    getCurrentUser: async (
+      _parent: any,
+      _args: any,
+      context: any,
+      _info: any,
+    ) =>
+      prisma.user.findUnique({ where: { email: context.session.user.email } }),
   },
 };
 
@@ -19,11 +24,14 @@ export const typeDefs = gql`
   }
   type Query {
     getUsers: [User]
+    getCurrentUser: User
   }
 `;
 
 const context = async ({ req }: { req: any }) => {
-  req.headers.cookie = req.headers.cookies;
+  req.headers.cookie = req.headers.cookies
+    ? req.headers.cookies
+    : req.headers.cookie;
   const session = await getSession({ req });
   return { session };
 };

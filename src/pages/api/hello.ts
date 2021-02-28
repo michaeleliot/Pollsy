@@ -27,7 +27,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   cookies = req.headers.cookie;
   const GET_USERS = gql`
     {
-      getUsers {
+      getCurrentUser {
         id
         email
         name

@@ -1,12 +1,17 @@
 import { AppProps } from 'next/app';
 import '@/styles/global.css';
 import { Provider } from 'next-auth/client';
+import { ApolloProvider } from '@apollo/client';
+import { useApollo } from '../../lib/apolloClient';
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const apolloClient = useApollo(pageProps.initialApolloState);
   return (
-    <Provider session={pageProps.session}>
-      <Component {...pageProps} />
-    </Provider>
+    <ApolloProvider client={apolloClient}>
+      <Provider session={pageProps.session}>
+        <Component {...pageProps} />
+      </Provider>
+    </ApolloProvider>
   );
 }
 
