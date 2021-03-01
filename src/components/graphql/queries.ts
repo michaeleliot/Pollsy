@@ -46,3 +46,12 @@ export const GET_POLLS = gql`
     }
   }
 `;
+
+export const CREATE_POLL = gql`
+  mutation createPoll($title: String!, $description: String!) {
+    createPoll(title: $title, description: $description) {
+      title
+      description
+    }
+  }
+`;
