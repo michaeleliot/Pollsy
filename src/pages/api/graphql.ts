@@ -1,5 +1,5 @@
-import { ApolloServer, gql } from 'apollo-server-micro';
-import { PrismaClient } from '@prisma/client';
+import { ApolloServer } from 'apollo-server-micro';
+import { PrismaClient, Option } from '@prisma/client';
 import { getSession } from 'next-auth/client';
 import { typeDefs } from '../../components/graphql/queries';
 
@@ -14,7 +14,7 @@ export const resolvers = {
       _info: any,
     ) =>
       prisma.user.findUnique({ where: { email: context.session.user.email } }),
-    getPolls: async (parent, args, context, info) => prisma.poll.findMany(),
+    getPolls: async () => prisma.poll.findMany({ include: { options: true } }),
   },
   Mutation: {
     createPoll: async (_parent: any, args: any, context: any, _info: any) =>
@@ -25,6 +25,12 @@ export const resolvers = {
           userId: context.session?.user.userId
             ? context.session?.user.userId
             : 1,
+          options: {
+            create: args.options.map((option: Option) => ({
+              ...option,
+              votes: 0,
+            })),
+          },
         },
       }),
   },

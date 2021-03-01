@@ -2,21 +2,21 @@ import { gql } from '@apollo/client';
 
 export const typeDefs = gql`
   type User {
-    id: Int
     email: String
     name: String
   }
   type Poll {
-    id: Int
     title: String
     description: String
     options: [Option]
     user: User
   }
   type Option {
-    id: Int
     description: String
     votes: Int
+  }
+  input OptionInput {
+    description: String
   }
   type Query {
     getUsers: [User]
@@ -24,7 +24,11 @@ export const typeDefs = gql`
     getPolls: [Poll]
   }
   type Mutation {
-    createPoll(title: String!, description: String!): Poll
+    createPoll(
+      title: String!
+      description: String!
+      options: [OptionInput]!
+    ): Poll
   }
 `;
 
@@ -52,6 +56,7 @@ export const CREATE_POLL = gql`
     createPoll(title: $title, description: $description) {
       title
       description
+      options
     }
   }
 `;
