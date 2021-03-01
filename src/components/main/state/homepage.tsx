@@ -1,10 +1,10 @@
-import { signIn, signOut, useSession } from 'next-auth/client';
 import { useQuery } from '@apollo/client';
+import Link from 'next/link';
+import { signOut } from 'next-auth/client';
 import { GET_POLLS } from '../../graphql/queries';
-import SignInRedirect from '../view/signin';
-import Main from '../view/main';
+import PollListView from '../view/PollListView';
 
-export default function Page({ session }: { session: any }) {
+export default function HomePage({ session }: { session: any }) {
   const { loading, error, data } = useQuery(GET_POLLS);
 
   if (error) return <div>Error getting polls.</div>;
@@ -12,8 +12,14 @@ export default function Page({ session }: { session: any }) {
 
   return (
     <>
-      {!session && <SignInRedirect />}
-      {session && <Main data={data.getPolls} session={session} />}
+      Signed in as {session.user.email} <br />
+      <PollListView data={data.getPolls} />
+      <Link href="/create">
+        <a>Create a poll!</a>
+      </Link>
+      <button type="button" onClick={() => signOut()}>
+        Sign out
+      </button>
     </>
   );
 }
