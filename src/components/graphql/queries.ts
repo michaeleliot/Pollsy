@@ -52,11 +52,17 @@ export const GET_POLLS = gql`
 `;
 
 export const CREATE_POLL = gql`
-  mutation createPoll($title: String!, $description: String!) {
-    createPoll(title: $title, description: $description) {
+  mutation createPoll(
+    $title: String!
+    $description: String!
+    $options: [OptionInput]!
+  ) {
+    createPoll(title: $title, description: $description, options: $options) {
       title
       description
-      options
+      options {
+        description
+      }
     }
   }
 `;

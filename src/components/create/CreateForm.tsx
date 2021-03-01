@@ -3,6 +3,7 @@ import { Poll } from '@prisma/client';
 import { useMutation } from '@apollo/client';
 import Link from 'next/link';
 import { CREATE_POLL } from '../graphql/queries';
+import CreateFormOptions from './CreateFormOptions';
 
 export default function CreateForm() {
   const { register, handleSubmit } = useForm();
@@ -15,6 +16,8 @@ export default function CreateForm() {
         <input name="title" ref={register} placeholder="Title" />
 
         <input name="description" ref={register} placeholder="Description" />
+
+        <CreateFormOptions register={register} />
 
         <input type="submit" />
       </form>
