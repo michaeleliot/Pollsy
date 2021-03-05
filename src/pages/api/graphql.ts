@@ -42,7 +42,7 @@ export const resolvers = {
       }),
     answerPoll: async (_parent: any, args: any, context: any, _info: any) => {
       // TODO Fix this to be atomic
-      prisma.option.update({
+      await prisma.option.update({
         where: {
           id: args.optionId,
         },

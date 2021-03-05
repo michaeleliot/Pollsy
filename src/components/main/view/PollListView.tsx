@@ -1,10 +1,11 @@
-import { Poll } from '@prisma/client';
+import { Poll, Option } from '@prisma/client';
+import PollView from './PollView';
 
 export default function PollListView({ data }: { data: Poll[] }) {
   return (
     <ul>
       {data.map((poll: Poll) => (
-        <li>{`${poll.title}: ${poll.description}`}</li>
+        <PollView key={poll.id} poll={poll} />
       ))}
     </ul>
   );

@@ -6,6 +6,7 @@ export const typeDefs = gql`
     name: String
   }
   type Poll {
+    id: Int
     title: String
     description: String
     user: User
@@ -53,8 +54,14 @@ export const GET_USER = gql`
 export const GET_POLLS = gql`
   {
     getPolls {
+      id
       title
       description
+      options {
+        id
+        description
+        votes
+      }
     }
   }
 `;
@@ -77,8 +84,10 @@ export const CREATE_POLL = gql`
 
 export const ANSWER_POLL = gql`
   mutation answerPoll($optionId: Int!) {
-    answerPoll(option: $optionId) {
-      pollId
+    answerPoll(optionId: $optionId) {
+      option {
+        votes
+      }
     }
   }
 `;
