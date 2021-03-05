@@ -8,27 +8,35 @@ export const typeDefs = gql`
   type Poll {
     title: String
     description: String
-    options: [Option]
     user: User
+    options: [Option]
   }
   type Option {
+    id: Int
     description: String
     votes: Int
   }
   input OptionInput {
     description: String
   }
+  type Answer {
+    user: User
+    option: Option
+  }
+  type Whatever {
+    optionId: Int
+    count: Int
+  }
   type Query {
     getUsers: [User]
     getCurrentUser: User
     getPolls: [Poll]
+    getPollInfo(pollId: Int!): [Whatever]
   }
   type Mutation {
-    createPoll(
-      title: String!
-      description: String!
-      options: [OptionInput]!
-    ): Poll
+    createPoll(title: String, description: String, options: [OptionInput]): Poll
+    answerPoll(optionId: Int!): Answer
+    clearPolls: [Poll]
   }
 `;
 
@@ -63,6 +71,14 @@ export const CREATE_POLL = gql`
       options {
         description
       }
+    }
+  }
+`;
+
+export const ANSWER_POLL = gql`
+  mutation answerPoll($optionId: Int!) {
+    answerPoll(option: $optionId) {
+      pollId
     }
   }
 `;

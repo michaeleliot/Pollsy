@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["groupBy"]
 }
 
 datasource db {
@@ -17,11 +18,20 @@ model Poll {
 }
 
 model Option {
-  id          Int    @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   description String
-  votes       Int
   pollId      Int?
-  Poll        Poll?  @relation(fields: [pollId], references: [id])
+  votes       Int      @default(0)
+  poll        Poll?    @relation(fields: [pollId], references: [id])
+  answers     Answer[]
+}
+
+model Answer {
+  id       Int    @id @default(autoincrement())
+  optionId Int
+  userId   Int
+  option   Option @relation(fields: [optionId], references: [id])
+  user     User   @relation(fields: [userId], references: [id])
 }
 
 model Account {
@@ -63,6 +73,7 @@ model User {
   image         String?
   createdAt     DateTime  @default(now()) @map("created_at")
   updatedAt     DateTime  @default(now()) @map("updated_at")
+  Answer        Answer[]
   Poll          Poll[]
 
   @@map("users")

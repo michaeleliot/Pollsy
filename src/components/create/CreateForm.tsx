@@ -11,7 +11,7 @@ export default function CreateForm() {
   const onSubmit = (poll: Poll) => createPoll({ variables: poll });
 
   return (
-    <>
+    <div>
       <form onSubmit={handleSubmit(onSubmit)}>
         <input name="title" ref={register} placeholder="Title" />
 
@@ -25,6 +25,6 @@ export default function CreateForm() {
       <Link href="/">
         <a>Return To Homepage!</a>
       </Link>
-    </>
+    </div>
   );
 }

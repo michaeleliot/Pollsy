@@ -1,5 +1,5 @@
 import { ApolloServer } from 'apollo-server-micro';
-import { PrismaClient, Option } from '@prisma/client';
+import { PrismaClient, Option, Poll } from '@prisma/client';
 import { getSession } from 'next-auth/client';
 import { typeDefs } from '../../components/graphql/queries';
 
@@ -14,9 +14,16 @@ export const resolvers = {
       _info: any,
     ) =>
       prisma.user.findUnique({ where: { email: context.session.user.email } }),
-    getPolls: async () => prisma.poll.findMany({ include: { options: true } }),
+    getPolls: async () =>
+      prisma.poll.findMany({
+        include: {
+          user: true,
+          options: true,
+        },
+      }),
   },
   Mutation: {
+    clearPolls: async () => prisma.poll.deleteMany(),
     createPoll: async (_parent: any, args: any, context: any, _info: any) =>
       prisma.poll.create({
         data: {
@@ -26,13 +33,34 @@ export const resolvers = {
             ? context.session?.user.userId
             : 1,
           options: {
-            create: args.options.map((option: Option) => ({
-              ...option,
-              votes: 0,
-            })),
+            create: args.options,
           },
         },
+        include: {
+          options: true,
+        },
       }),
+    answerPoll: async (_parent: any, args: any, context: any, _info: any) => {
+      // TODO Fix this to be atomic
+      prisma.option.update({
+        where: {
+          id: args.optionId,
+        },
+        data: {
+          votes: {
+            increment: 1,
+          },
+        },
+      });
+      return prisma.answer.create({
+        data: {
+          optionId: args.optionId,
+          userId: context.session?.user.userId
+            ? context.session?.user.userId
+            : 1,
+        },
+      });
+    },
   },
 };
 
