@@ -21,6 +21,11 @@ export const resolvers = {
           options: true,
         },
       }),
+    getPoll: async (_parent: any, args: any, _context: any, _info: any) =>
+      prisma.poll.findUnique({
+        where: { id: args.pollId },
+        include: { options: true, user: true },
+      }),
   },
   Mutation: {
     clearPolls: async () => prisma.poll.deleteMany(),

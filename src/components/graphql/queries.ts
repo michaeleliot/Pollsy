@@ -24,15 +24,11 @@ export const typeDefs = gql`
     user: User
     option: Option
   }
-  type Whatever {
-    optionId: Int
-    count: Int
-  }
   type Query {
     getUsers: [User]
     getCurrentUser: User
     getPolls: [Poll]
-    getPollInfo(pollId: Int!): [Whatever]
+    getPoll(pollId: Int!): Poll
   }
   type Mutation {
     createPoll(title: String, description: String, options: [OptionInput]): Poll
@@ -57,6 +53,25 @@ export const GET_POLLS = gql`
       id
       title
       description
+      options {
+        id
+        description
+        votes
+      }
+    }
+  }
+`;
+
+export const GET_POLL = gql`
+  query getPoll($pollId: Int!) {
+    getPoll(pollId: $pollId) {
+      id
+      title
+      description
+      title
+      user {
+        name
+      }
       options {
         id
         description
