@@ -3,13 +3,32 @@ import { ApolloClient, HttpLink, InMemoryCache } from "@apollo/client";
 
 let apolloClient: ApolloClient<InMemoryCache>;
 
+const cache = new InMemoryCache({
+  typePolicies: {
+    Query: {
+      fields: {
+        getPolls: {
+          keyArgs: false,
+          merge(existing = [], incoming, { args: { offset = 0 }}) {
+            const merged = existing ? existing.slice(0) : [];
+            for (let i = 0; i < incoming.length; ++i) {
+              merged[offset + i] = incoming[i];
+            }
+            return merged;
+          },
+        }
+      }
+    }
+  }
+})
+
 function createApolloClient() {
   return new ApolloClient({
     ssrMode: typeof window === "undefined", // set to true for SSR
     link: new HttpLink({
       uri: "http://localhost:3000/api/graphql",
     }),
-    cache: new InMemoryCache(),
+    cache: cache,
   });
 }
 
