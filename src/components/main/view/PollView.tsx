@@ -5,9 +5,17 @@ import { ANSWER_POLL } from '../../graphql/queries';
 
 export default function PollView({ poll }: { poll: Poll }) {
   const { register, handleSubmit } = useForm();
-  const [answerPoll, { data }] = useMutation(ANSWER_POLL);
-  const onSubmit = (selection: { optionId: string }) =>
-    answerPoll({ variables: { optionId: parseInt(selection.optionId, 10) } });
+  const [answerPoll, { data, error = { graphQLErrors: [] } }] = useMutation(
+    ANSWER_POLL,
+  );
+  const onSubmit = (selection: { optionId: string }) => {
+    answerPoll({
+      variables: {
+        optionId: parseInt(selection.optionId, 10),
+        pollId: poll.id,
+      },
+    }).catch((err) => console.log(err));
+  };
   return (
     <div key={`poll-${poll.id}`}>
       {`${poll.title}: ${poll.description}`}
@@ -29,6 +37,14 @@ export default function PollView({ poll }: { poll: Poll }) {
         ))}
         <input type="submit" />
       </form>
+      <pre>
+        Bad:{` `}
+        {error.graphQLErrors.map(
+          ({ message }: { message: string }, i: number) => (
+            <span>{message}</span>
+          ),
+        )}
+      </pre>
     </div>
   );
 }

@@ -14,15 +14,16 @@ model Poll {
   description String
   userId      Int
   user        User     @relation(fields: [userId], references: [id])
+  Answer      Answer[]
   options     Option[]
 }
 
 model Option {
   id          Int      @id @default(autoincrement())
   description String
-  pollId      Int?
+  pollId      Int
   votes       Int      @default(0)
-  poll        Poll?    @relation(fields: [pollId], references: [id])
+  poll        Poll     @relation(fields: [pollId], references: [id])
   answers     Answer[]
 }
 
@@ -30,7 +31,9 @@ model Answer {
   id       Int    @id @default(autoincrement())
   optionId Int
   userId   Int
+  pollId   Int
   option   Option @relation(fields: [optionId], references: [id])
+  poll     Poll   @relation(fields: [pollId], references: [id])
   user     User   @relation(fields: [userId], references: [id])
 }
 

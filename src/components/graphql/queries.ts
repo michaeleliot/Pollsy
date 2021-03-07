@@ -32,7 +32,7 @@ export const typeDefs = gql`
   }
   type Mutation {
     createPoll(title: String, description: String, options: [OptionInput]): Poll
-    answerPoll(optionId: Int!): Answer
+    answerPoll(optionId: Int!, pollId: Int!): Answer
     clearPolls: [Poll]
   }
 `;
@@ -98,8 +98,8 @@ export const CREATE_POLL = gql`
 `;
 
 export const ANSWER_POLL = gql`
-  mutation answerPoll($optionId: Int!) {
-    answerPoll(optionId: $optionId) {
+  mutation answerPoll($optionId: Int!, $pollId: Int!) {
+    answerPoll(optionId: $optionId, pollId: $pollId) {
       option {
         votes
       }

@@ -49,6 +49,15 @@ export const resolvers = {
       }),
     answerPoll: async (_parent: any, args: any, context: any, _info: any) => {
       // TODO Fix this to be atomic
+      const res = await prisma.answer.create({
+        data: {
+          pollId: args.pollId,
+          optionId: args.optionId,
+          userId: context.session?.user.userId
+            ? context.session?.user.userId
+            : 1,
+        },
+      });
       await prisma.option.update({
         where: {
           id: args.optionId,
@@ -59,14 +68,7 @@ export const resolvers = {
           },
         },
       });
-      return prisma.answer.create({
-        data: {
-          optionId: args.optionId,
-          userId: context.session?.user.userId
-            ? context.session?.user.userId
-            : 1,
-        },
-      });
+      return res;
     },
   },
 };
