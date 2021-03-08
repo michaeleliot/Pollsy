@@ -22,6 +22,7 @@ export const typeDefs = gql`
     description: String
   }
   type Answer {
+    option: Option
     optionId: Int
     userId: Int
   }

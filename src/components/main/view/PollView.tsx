@@ -35,7 +35,7 @@ export default function PollView({ poll }: { poll: Poll }) {
               ref={register({ required: true })}
               type="radio"
               value={option.id}
-              checked={userAnswer && userAnswer.optionId === option.id}
+              defaultChecked={userAnswer && userAnswer.optionId === option.id}
             />
             <label
               htmlFor={option.id.toString()}

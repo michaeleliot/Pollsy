@@ -36,7 +36,11 @@ export const resolvers = {
       }),
   },
   Mutation: {
-    clearPolls: async () => prisma.poll.deleteMany(),
+    clearPolls: async () => {
+      await prisma.answer.deleteMany();
+      await prisma.option.deleteMany();
+      return prisma.poll.deleteMany();
+    },
     createPoll: async (_parent: any, args: any, context: any, _info: any) =>
       prisma.poll.create({
         data: {
@@ -55,6 +59,44 @@ export const resolvers = {
       }),
     answerPoll: async (_parent: any, args: any, context: any, _info: any) => {
       // TODO Fix this to be atomic
+      const userAnswer = await prisma.answer.findFirst({
+        where: {
+          userId: context.session?.user.userId
+            ? context.session?.user.userId
+            : 1,
+          pollId: args.pollId,
+        },
+      });
+      if (userAnswer) {
+        await prisma.option.update({
+          where: {
+            id: userAnswer.optionId,
+          },
+          data: {
+            votes: {
+              decrement: 1,
+            },
+          },
+        });
+        await prisma.option.update({
+          where: {
+            id: args.optionId,
+          },
+          data: {
+            votes: {
+              increment: 1,
+            },
+          },
+        });
+        return prisma.answer.update({
+          where: {
+            id: userAnswer.id,
+          },
+          data: {
+            optionId: args.optionId,
+          },
+        });
+      }
       const res = await prisma.answer.create({
         data: {
           pollId: args.pollId,
