@@ -11,6 +11,7 @@ export const typeDefs = gql`
     description: String
     user: User
     options: [Option]
+    Answer: [Answer]
   }
   type Option {
     id: Int
@@ -21,8 +22,8 @@ export const typeDefs = gql`
     description: String
   }
   type Answer {
-    user: User
-    option: Option
+    optionId: Int
+    userId: Int
   }
   type Query {
     getUsers: [User]
@@ -76,6 +77,10 @@ export const GET_POLL = gql`
         id
         description
         votes
+      }
+      Answer {
+        userId
+        optionId
       }
     }
   }
