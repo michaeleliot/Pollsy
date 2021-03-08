@@ -1,5 +1,5 @@
 import { useForm } from 'react-hook-form';
-import { Option, Poll } from '@prisma/client';
+import { Option, Poll, Answer } from '@prisma/client';
 import { useMutation } from '@apollo/client';
 import { ANSWER_POLL } from '../../graphql/queries';
 
@@ -16,6 +16,12 @@ export default function PollView({ poll }: { poll: Poll }) {
       },
     }).catch((err) => console.log(err));
   };
+  let userAnswer: Answer | undefined;
+  if (poll.Answer.length) {
+    const { Answer: answerArray } = poll;
+    const userAnswerIndex = 0;
+    userAnswer = answerArray[userAnswerIndex];
+  }
   return (
     <div key={`poll-${poll.id}`}>
       {`${poll.title}: ${poll.description}`}
@@ -29,6 +35,7 @@ export default function PollView({ poll }: { poll: Poll }) {
               ref={register({ required: true })}
               type="radio"
               value={option.id}
+              checked={userAnswer && userAnswer.optionId === option.id}
             />
             <label
               htmlFor={option.id.toString()}

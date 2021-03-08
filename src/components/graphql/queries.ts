@@ -59,6 +59,10 @@ export const GET_POLLS = gql`
         description
         votes
       }
+      Answer {
+        userId
+        optionId
+      }
     }
   }
 `;
