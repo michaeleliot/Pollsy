@@ -1,9 +1,8 @@
 import { useForm } from 'react-hook-form';
-import { Option, Poll, Answer } from '@prisma/client';
 import { useMutation } from '@apollo/client';
 import { ANSWER_POLL } from '../../graphql/queries';
 
-export default function PollView({ poll }: { poll: Poll }) {
+export default function PollView({ poll }: { poll: any; session: any }) {
   const { register, handleSubmit } = useForm();
   const [answerPoll, { data, error = { graphQLErrors: [] } }] = useMutation(
     ANSWER_POLL,
@@ -16,17 +15,12 @@ export default function PollView({ poll }: { poll: Poll }) {
       },
     }).catch((err) => console.log(err));
   };
-  let userAnswer: Answer | undefined;
-  if (poll.Answer.length) {
-    const { Answer: answerArray } = poll;
-    const userAnswerIndex = 0;
-    userAnswer = answerArray[userAnswerIndex];
-  }
+
   return (
     <div key={`poll-${poll.id}`}>
       {`${poll.title}: ${poll.description}`}
       <form onSubmit={handleSubmit(onSubmit)}>
-        {poll.options.map((option: Option) => (
+        {poll.options.map((option: any) => (
           <div key={`option-${option.id}`}>
             <input
               name="optionId"
@@ -35,7 +29,7 @@ export default function PollView({ poll }: { poll: Poll }) {
               ref={register({ required: true })}
               type="radio"
               value={option.id}
-              defaultChecked={userAnswer && userAnswer.optionId === option.id}
+              defaultChecked={option.selected}
             />
             <label
               htmlFor={option.id.toString()}

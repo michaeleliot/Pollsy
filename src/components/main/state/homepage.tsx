@@ -19,7 +19,7 @@ export default function HomePage({ session }: { session: any }) {
   return (
     <>
       Signed in as {session.user.email} <br />
-      <PollListView data={polls} fetchMore={fetchMore} />
+      <PollListView data={polls} fetchMore={fetchMore} session={session} />
       <Link href="/create">
         <a>Create a poll!</a>
       </Link>

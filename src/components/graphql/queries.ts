@@ -11,17 +11,18 @@ export const typeDefs = gql`
     description: String
     user: User
     options: [Option]
-    Answer: [Answer]
   }
   type Option {
     id: Int
     description: String
     votes: Int
+    selected: Boolean
   }
   input OptionInput {
     description: String
   }
   type Answer {
+    id: Int
     option: Option
     optionId: Int
     userId: Int
@@ -59,10 +60,7 @@ export const GET_POLLS = gql`
         id
         description
         votes
-      }
-      Answer {
-        userId
-        optionId
+        selected
       }
     }
   }
@@ -81,11 +79,7 @@ export const GET_POLL = gql`
       options {
         id
         description
-        votes
-      }
-      Answer {
-        userId
-        optionId
+        answers
       }
     }
   }
@@ -111,7 +105,7 @@ export const ANSWER_POLL = gql`
   mutation answerPoll($optionId: Int!, $pollId: Int!) {
     answerPoll(optionId: $optionId, pollId: $pollId) {
       option {
-        votes
+        id
       }
     }
   }
