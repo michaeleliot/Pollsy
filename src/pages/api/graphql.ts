@@ -16,9 +16,11 @@ export const resolvers = {
       prisma.user.findUnique({ where: { email: context.session.user.email } }),
     getPolls: async (_parent: any, args: any, context: any, _info: any) => {
       const userId = context.session?.user?.userId ?? 1;
+      const where = args.mine ? { userId } : {};
       let polls = await prisma.poll.findMany({
         skip: args.offset,
         take: args.limit,
+        where,
         include: {
           options: {
             include: {

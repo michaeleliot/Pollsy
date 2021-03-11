@@ -30,7 +30,7 @@ export const typeDefs = gql`
   type Query {
     getUsers: [User]
     getCurrentUser: User
-    getPolls(offset: Int, limit: Int): [Poll]
+    getPolls(offset: Int, limit: Int, mine: Boolean): [Poll]
     getPoll(pollId: Int!): Poll
   }
   type Mutation {
@@ -51,8 +51,8 @@ export const GET_USER = gql`
 `;
 
 export const GET_POLLS = gql`
-  query getPolls($offset: Int, $limit: Int) {
-    getPolls(offset: $offset, limit: $limit) {
+  query getPolls($offset: Int, $limit: Int, $mine: Boolean) {
+    getPolls(offset: $offset, limit: $limit, mine: $mine) {
       id
       title
       description

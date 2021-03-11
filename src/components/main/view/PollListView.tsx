@@ -6,11 +6,9 @@ import PollView from './PollView';
 export default function PollListView({
   data,
   fetchMore,
-  session,
 }: {
   data: Poll[];
   fetchMore: any;
-  session: any;
 }) {
   const [hasMore, setHasMore] = useState(true);
   const fetchData = () =>
@@ -33,7 +31,7 @@ export default function PollListView({
       }
     >
       {data.map((poll: Poll) => (
-        <PollView key={poll.id} poll={poll} session={session} />
+        <PollView key={poll.id} poll={poll} />
       ))}
     </InfiniteScroll>
   );

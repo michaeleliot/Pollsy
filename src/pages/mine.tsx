@@ -6,9 +6,5 @@ export default function Page() {
   const [session, sessionLoading] = useSession();
   if (sessionLoading) return <div>Loading</div>;
 
-  return session ? (
-    <HomePage session={session} mine={false} />
-  ) : (
-    <SignInRedirect />
-  );
+  return session ? <HomePage session={session} mine /> : <SignInRedirect />;
 }

@@ -4,11 +4,18 @@ import { signOut } from 'next-auth/client';
 import { GET_POLLS } from '../../graphql/queries';
 import PollListView from '../view/PollListView';
 
-export default function HomePage({ session }: { session: any }) {
+export default function HomePage({
+  session,
+  mine,
+}: {
+  session: any;
+  mine: boolean;
+}) {
   const { loading, error, data, fetchMore } = useQuery(GET_POLLS, {
     variables: {
       offset: 0,
       limit: 20,
+      mine: false,
     },
   });
 
@@ -19,7 +26,7 @@ export default function HomePage({ session }: { session: any }) {
   return (
     <>
       Signed in as {session.user.email} <br />
-      <PollListView data={polls} fetchMore={fetchMore} session={session} />
+      <PollListView data={polls} fetchMore={fetchMore} />
       <Link href="/create">
         <a>Create a poll!</a>
       </Link>
