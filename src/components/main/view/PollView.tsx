@@ -2,7 +2,7 @@ import { useForm } from 'react-hook-form';
 import { useMutation } from '@apollo/client';
 import { ANSWER_POLL } from '../../graphql/queries';
 
-export default function PollView({ poll }: { poll: any; session: any }) {
+export default function PollView({ poll }: { poll: any }) {
   const { register, handleSubmit } = useForm();
   const [answerPoll, { data, error = { graphQLErrors: [] } }] = useMutation(
     ANSWER_POLL,
@@ -38,14 +38,6 @@ export default function PollView({ poll }: { poll: any; session: any }) {
         ))}
         <input type="submit" />
       </form>
-      <pre>
-        Bad:{` `}
-        {error.graphQLErrors.map(
-          ({ message }: { message: string }, i: number) => (
-            <span>{message}</span>
-          ),
-        )}
-      </pre>
     </div>
   );
 }

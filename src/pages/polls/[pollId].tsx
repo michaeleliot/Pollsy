@@ -4,6 +4,7 @@ import { useQuery } from '@apollo/client';
 import Link from 'next/link';
 import PollView from '../../components/main/view/PollView';
 import { GET_POLL } from '../../components/graphql/queries';
+import SignInRedirect from '../../components/main/view/SignInPage';
 
 export default function Page() {
   const router = useRouter();
@@ -21,12 +22,14 @@ export default function Page() {
   if (error) return <div>Error getting poll.</div>;
   if (loading) return <div>Loading</div>;
 
-  return (
+  return session ? (
     <div>
       <PollView poll={data.getPoll} />
       <Link href="/">
         <a>Back to the Homepage</a>
       </Link>
     </div>
+  ) : (
+    <SignInRedirect />
   );
 }
