@@ -1,5 +1,5 @@
 import { ApolloServer } from 'apollo-server-micro';
-import { PrismaClient, Option, Poll } from '@prisma/client';
+import { PrismaClient, Option, PollPrivacy } from '@prisma/client';
 import { getSession } from 'next-auth/client';
 import { typeDefs } from '../../components/graphql/queries';
 
@@ -16,7 +16,10 @@ export const resolvers = {
       prisma.user.findUnique({ where: { email: context.session.user.email } }),
     getPolls: async (_parent: any, args: any, context: any, _info: any) => {
       const userId = context.session?.user?.userId ?? 1;
-      const where = args.mine ? { userId } : {};
+      const where = args.mine
+        ? { userId, privacy: PollPrivacy.PRIVATE }
+        : { privacy: PollPrivacy.PUBLIC };
+      console.log(args);
       let polls = await prisma.poll.findMany({
         skip: args.offset,
         take: args.limit,
@@ -69,6 +72,7 @@ export const resolvers = {
           options: {
             create: args.options,
           },
+          privacy: args.privacy,
         },
         include: {
           options: true,

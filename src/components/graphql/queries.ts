@@ -9,6 +9,7 @@ export const typeDefs = gql`
     id: Int
     title: String
     description: String
+    privacy: Privacy
     user: User
     options: [Option]
   }
@@ -34,9 +35,19 @@ export const typeDefs = gql`
     getPoll(pollId: Int!): Poll
   }
   type Mutation {
-    createPoll(title: String, description: String, options: [OptionInput]): Poll
+    createPoll(
+      title: String
+      description: String
+      privacy: Privacy
+      options: [OptionInput]
+    ): Poll
     answerPoll(optionId: Int!, pollId: Int!): Answer
     clearPolls: [Poll]
+  }
+  enum Privacy {
+    PUBLIC
+    PRIVATE
+    LINKED
   }
 `;
 
@@ -56,6 +67,7 @@ export const GET_POLLS = gql`
       id
       title
       description
+      privacy
       options {
         id
         description
@@ -73,6 +85,7 @@ export const GET_POLL = gql`
       title
       description
       title
+      privacy
       user {
         name
       }
@@ -90,10 +103,17 @@ export const CREATE_POLL = gql`
     $title: String!
     $description: String!
     $options: [OptionInput]!
+    $privacy: Privacy
   ) {
-    createPoll(title: $title, description: $description, options: $options) {
+    createPoll(
+      title: $title
+      description: $description
+      options: $options
+      privacy: $privacy
+    ) {
       title
       description
+      privacy
       options {
         description
       }

@@ -15,7 +15,7 @@ export default function HomePage({
     variables: {
       offset: 0,
       limit: 20,
-      mine: false,
+      mine,
     },
   });
 

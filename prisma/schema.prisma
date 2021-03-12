@@ -9,11 +9,12 @@ datasource db {
 }
 
 model Poll {
-  id          Int      @id @default(autoincrement())
+  id          Int         @id @default(autoincrement())
   title       String
   description String
   userId      Int
-  user        User     @relation(fields: [userId], references: [id])
+  privacy     PollPrivacy @default(PUBLIC)
+  user        User        @relation(fields: [userId], references: [id])
   Answer      Answer[]
   options     Option[]
 }
@@ -93,4 +94,10 @@ model VerificationRequest {
   updatedAt  DateTime @default(now()) @map("updated_at")
 
   @@map("verification_requests")
+}
+
+enum PollPrivacy {
+  PUBLIC
+  LINKED
+  PRIVATE
 }

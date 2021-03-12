@@ -1,5 +1,5 @@
 import { useForm } from 'react-hook-form';
-import { Poll } from '@prisma/client';
+import { Poll, PollPrivacy } from '@prisma/client';
 import { useMutation } from '@apollo/client';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -21,6 +21,12 @@ export default function CreateForm() {
         <input name="title" ref={register} placeholder="Title" />
 
         <input name="description" ref={register} placeholder="Description" />
+
+        <select name="privacy" ref={register} placeholder="Privacy">
+          <option value={PollPrivacy.PUBLIC}>Public</option>
+          <option value={PollPrivacy.PRIVATE}>Private</option>
+          <option value={PollPrivacy.LINKED}>Linked</option>
+        </select>
 
         <CreateFormOptions register={register} />
 
