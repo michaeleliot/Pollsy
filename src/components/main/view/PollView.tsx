@@ -10,7 +10,7 @@ export default function PollView({ poll }: { poll: any }) {
   const onSubmit = (selection: { optionId: string }) => {
     answerPoll({
       variables: {
-        optionId: parseInt(selection.optionId, 10),
+        optionId: selection.optionId,
         pollId: poll.id,
       },
     }).catch((err) => console.log(err));
@@ -24,7 +24,7 @@ export default function PollView({ poll }: { poll: any }) {
           <div key={`option-${option.id}`}>
             <input
               name="optionId"
-              id={option.id.toString()}
+              id={option.id}
               key={option.id}
               ref={register({ required: true })}
               type="radio"
@@ -32,7 +32,7 @@ export default function PollView({ poll }: { poll: any }) {
               defaultChecked={option.selected}
             />
             <label
-              htmlFor={option.id.toString()}
+              htmlFor={option.id}
             >{`${option.description} - Votes: ${option.votes}`}</label>
           </div>
         ))}

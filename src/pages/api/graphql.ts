@@ -48,12 +48,25 @@ export const resolvers = {
       });
       return polls;
     },
-    getPoll: async (_parent: any, args: any, _context: any, _info: any) =>
+    getPoll: async (_parent: any, args: any, context: any, _info: any) =>
       // TODO change this to include aggregate of answer
-      prisma.poll.findUnique({
-        where: { id: args.pollId },
-        include: { options: { include: { answers: true } }, user: true },
-      }),
+      {
+        const userId = context.session?.user?.userId ?? 1;
+        const poll_copy = await prisma.poll.findUnique({
+          where: { id: args.pollId },
+          include: { options: { include: { answers: true } }, user: true },
+        });
+        poll_copy.options = poll_copy.options.map((option: Option) => {
+          const option_copy: any = option;
+          option_copy.votes = option_copy.answers.length;
+          option_copy.selected = option_copy.answers.some(
+            (answer: any) => answer.userId === userId,
+          );
+          delete option_copy.answers;
+          return option_copy;
+        });
+        return poll_copy;
+      },
   },
   Mutation: {
     clearPolls: async () => {

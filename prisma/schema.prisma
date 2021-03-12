@@ -9,7 +9,7 @@ datasource db {
 }
 
 model Poll {
-  id          Int         @id @default(autoincrement())
+  id          String      @id @default(uuid())
   title       String
   description String
   userId      Int
@@ -20,19 +20,19 @@ model Poll {
 }
 
 model Option {
-  id          Int      @id @default(autoincrement())
+  id          String   @id @default(uuid())
   description String
-  pollId      Int
+  pollId      String
   votes       Int      @default(0)
   poll        Poll     @relation(fields: [pollId], references: [id])
   answers     Answer[]
 }
 
 model Answer {
-  id       Int    @id @default(autoincrement())
-  optionId Int
+  id       String @id @default(uuid())
+  optionId String
   userId   Int
-  pollId   Int
+  pollId   String
   option   Option @relation(fields: [optionId], references: [id])
   poll     Poll   @relation(fields: [pollId], references: [id])
   user     User   @relation(fields: [userId], references: [id])

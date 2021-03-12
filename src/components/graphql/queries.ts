@@ -6,7 +6,7 @@ export const typeDefs = gql`
     name: String
   }
   type Poll {
-    id: Int
+    id: String
     title: String
     description: String
     privacy: Privacy
@@ -14,7 +14,7 @@ export const typeDefs = gql`
     options: [Option]
   }
   type Option {
-    id: Int
+    id: String
     description: String
     votes: Int
     selected: Boolean
@@ -23,16 +23,16 @@ export const typeDefs = gql`
     description: String
   }
   type Answer {
-    id: Int
+    id: String
     option: Option
-    optionId: Int
+    optionId: String
     userId: Int
   }
   type Query {
     getUsers: [User]
     getCurrentUser: User
     getPolls(offset: Int, limit: Int, mine: Boolean): [Poll]
-    getPoll(pollId: Int!): Poll
+    getPoll(pollId: String!): Poll
   }
   type Mutation {
     createPoll(
@@ -41,7 +41,7 @@ export const typeDefs = gql`
       privacy: Privacy
       options: [OptionInput]
     ): Poll
-    answerPoll(optionId: Int!, pollId: Int!): Answer
+    answerPoll(optionId: String!, pollId: String!): Answer
     clearPolls: [Poll]
   }
   enum Privacy {
@@ -79,12 +79,11 @@ export const GET_POLLS = gql`
 `;
 
 export const GET_POLL = gql`
-  query getPoll($pollId: Int!) {
+  query getPoll($pollId: String!) {
     getPoll(pollId: $pollId) {
       id
       title
       description
-      title
       privacy
       user {
         name
@@ -92,7 +91,8 @@ export const GET_POLL = gql`
       options {
         id
         description
-        answers
+        votes
+        selected
       }
     }
   }
@@ -122,7 +122,7 @@ export const CREATE_POLL = gql`
 `;
 
 export const ANSWER_POLL = gql`
-  mutation answerPoll($optionId: Int!, $pollId: Int!) {
+  mutation answerPoll($optionId: String!, $pollId: String!) {
     answerPoll(optionId: $optionId, pollId: $pollId) {
       option {
         id

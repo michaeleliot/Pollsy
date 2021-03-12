@@ -15,7 +15,7 @@ export default function Page() {
 
   const { loading, error, data } = useQuery(GET_POLL, {
     variables: {
-      pollId: parseInt(pollId as string, 10),
+      pollId,
     },
   });
 
