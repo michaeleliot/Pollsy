@@ -1,4 +1,4 @@
-import { ApolloServer } from 'apollo-server-micro';
+import { ApolloServer, UserInputError } from 'apollo-server-micro';
 import { PrismaClient, Option, PollPrivacy } from '@prisma/client';
 import { getSession } from 'next-auth/client';
 import { typeDefs } from '../../components/graphql/queries';
@@ -48,14 +48,13 @@ export const resolvers = {
       });
       return polls;
     },
-    getPoll: async (_parent: any, args: any, context: any, _info: any) =>
-      // TODO change this to include aggregate of answer
-      {
-        const userId = context.session?.user?.userId ?? 1;
-        const poll_copy = await prisma.poll.findUnique({
-          where: { id: args.pollId },
-          include: { options: { include: { answers: true } }, user: true },
-        });
+    getPoll: async (_parent: any, args: any, context: any, _info: any) => {
+      const userId = context.session?.user?.userId ?? 1;
+      const poll_copy = await prisma.poll.findUnique({
+        where: { id: args.pollId },
+        include: { options: { include: { answers: true } }, user: true },
+      });
+      if (poll_copy) {
         poll_copy.options = poll_copy.options.map((option: Option) => {
           const option_copy: any = option;
           option_copy.votes = option_copy.answers.length;
@@ -66,7 +65,9 @@ export const resolvers = {
           return option_copy;
         });
         return poll_copy;
-      },
+      }
+      throw new UserInputError(`Invalid poll`);
+    },
   },
   Mutation: {
     clearPolls: async () => {
