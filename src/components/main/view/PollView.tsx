@@ -1,42 +1,62 @@
 import { useForm } from 'react-hook-form';
 import { useMutation } from '@apollo/client';
+import { useState } from 'react';
 import { ANSWER_POLL } from '../../graphql/queries';
 
 export default function PollView({ poll }: { poll: any }) {
-  const { register, handleSubmit } = useForm();
   const [answerPoll, { data, error = { graphQLErrors: [] } }] = useMutation(
     ANSWER_POLL,
   );
-  const onSubmit = (selection: { optionId: string }) => {
+  const [options, setOptions] = useState(poll.options);
+  const onSubmit = (optionId: string) => {
     answerPoll({
       variables: {
-        optionId: selection.optionId,
+        optionId,
         pollId: poll.id,
       },
     }).catch((err) => console.log(err));
+    const tempOptions = options.slice();
+    const oldSelection = tempOptions.findIndex(
+      (option: any) => option.selected,
+    );
+    const newSelection = tempOptions.findIndex(
+      (option: any) => option.id === optionId,
+    );
+    if (oldSelection !== -1) {
+      tempOptions[oldSelection] = {
+        ...tempOptions[oldSelection],
+        selected: false,
+        votes: tempOptions[oldSelection].votes - 1,
+      };
+    }
+    tempOptions[newSelection] = {
+      ...tempOptions[newSelection],
+      selected: true,
+      votes: tempOptions[newSelection].votes + 1,
+    };
+    setOptions(tempOptions);
   };
 
   return (
     <div key={`poll-${poll.id}`}>
       {`${poll.title}: ${poll.description}`}
-      <form onSubmit={handleSubmit(onSubmit)}>
-        {poll.options.map((option: any) => (
+      <form>
+        {options.map((option: any) => (
           <div key={`option-${option.id}`}>
             <input
               name="optionId"
               id={option.id}
               key={option.id}
-              ref={register({ required: true })}
               type="radio"
               value={option.id}
               defaultChecked={option.selected}
+              onClick={() => onSubmit(option.id)}
             />
             <label
               htmlFor={option.id}
             >{`${option.description} - Votes: ${option.votes}`}</label>
           </div>
         ))}
-        <input type="submit" />
       </form>
     </div>
   );
