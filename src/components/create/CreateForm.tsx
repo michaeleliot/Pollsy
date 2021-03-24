@@ -16,24 +16,39 @@ export default function CreateForm() {
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <input name="title" ref={register} placeholder="Title" />
-
-        <input name="description" ref={register} placeholder="Description" />
-
-        <select name="privacy" ref={register} placeholder="Privacy">
+    <div className="w-full ">
+      <form
+        className="flex flex-col border border-gray-400 p-10 m-10 gap-2 rounded-lg w-1/2"
+        onSubmit={handleSubmit(onSubmit)}
+      >
+        Poll Creation Form
+        <input
+          name="title"
+          className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+          ref={register}
+          placeholder="Title"
+        />
+        <input
+          name="description"
+          className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+          ref={register}
+          placeholder="Description"
+        />
+        <select
+          name="privacy"
+          className="py-3 px-4 text-gray-700 bg-gray-200 border border-gray-200 rounded"
+          ref={register}
+          placeholder="Privacy"
+        >
           <option value={PollPrivacy.PUBLIC}>Public</option>
           <option value={PollPrivacy.PRIVATE}>Private</option>
           <option value={PollPrivacy.LINKED}>Linked</option>
         </select>
-
         <CreateFormOptions register={register} />
-
         <input type="submit" />
       </form>
       <Link href="/">
-        <a>Return To Homepage!</a>
+        <a className="m-10">Return To Homepage!</a>
       </Link>
     </div>
   );
