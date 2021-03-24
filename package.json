@@ -36,7 +36,8 @@
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "react-hook-form": "6.15.4",
-    "react-infinite-scroll-component": "6.0.0"
+    "react-infinite-scroll-component": "6.0.0",
+    "ts-invariant": "0.6.1"
   },
   "devDependencies": {
     "@commitlint/cli": "12.0.0",
@@ -47,6 +48,7 @@
     "@types/react-dom": "17.0.1",
     "@typescript-eslint/eslint-plugin": "4.15.1",
     "@typescript-eslint/parser": "4.15.1",
+    "autoprefixer": "10.2.5",
     "commitizen": "4.2.3",
     "cz-conventional-changelog": "3.3.0",
     "eslint": "7.20.0",
@@ -60,7 +62,9 @@
     "eslint-plugin-react-hooks": "4.2.0",
     "husky": "5.0.9",
     "lint-staged": "10.5.4",
+    "postcss": "8.2.8",
     "prettier": "2.2.1",
+    "tailwindcss": "2.0.4",
     "typescript": "4.1.5"
   },
   "config": {

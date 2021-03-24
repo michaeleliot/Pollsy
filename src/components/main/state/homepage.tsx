@@ -25,14 +25,24 @@ export default function HomePage({
   const polls = data.getPolls;
   return (
     <>
-      Signed in as {session.user.email} <br />
+      <div className="flex justify-between p-5">
+        <div className="flex gap-5">
+          {session.user.email} <br />
+          <button
+            type="button"
+            className="text-gray-600"
+            onClick={() => signOut()}
+          >
+            Sign out
+          </button>
+        </div>
+        <div>
+          <Link href="/create">
+            <a>Create a poll!</a>
+          </Link>
+        </div>
+      </div>
       <PollListView data={polls} fetchMore={fetchMore} />
-      <Link href="/create">
-        <a>Create a poll!</a>
-      </Link>
-      <button type="button" onClick={() => signOut()}>
-        Sign out
-      </button>
     </>
   );
 }

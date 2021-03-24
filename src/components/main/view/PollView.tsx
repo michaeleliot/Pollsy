@@ -38,7 +38,10 @@ export default function PollView({ poll }: { poll: any }) {
   };
 
   return (
-    <div key={`poll-${poll.id}`}>
+    <div
+      key={`poll-${poll.id}`}
+      className="p-5 card m-2 cursor-pointer border border-gray-400 rounded-lg hover:shadow-md hover:border-opacity-0 transform hover:-translate-y-1 transition-all duration-200"
+    >
       {`${poll.title}: ${poll.description}`}
       <form>
         {options.map((option: any) => (
