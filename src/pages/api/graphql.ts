@@ -1,9 +1,8 @@
 import { ApolloServer, UserInputError } from 'apollo-server-micro';
-import { PrismaClient, Option, PollPrivacy } from '@prisma/client';
+import { Option, PollPrivacy } from '@prisma/client';
 import { getSession } from 'next-auth/client';
 import { typeDefs } from '../../components/graphql/queries';
-
-const prisma = new PrismaClient();
+import prisma from '../../../lib/prismaClient';
 
 export const resolvers = {
   Query: {
@@ -89,27 +88,34 @@ export const resolvers = {
           options: true,
         },
       }),
-    answerPoll: async (_parent: any, args: any, context: any, _info: any) =>
-      prisma.answer.upsert({
-        where: {
-          user_poll_unique_constraint: {
-            userId: context.session?.user.userId
-              ? context.session?.user.userId
-              : 1,
-            pollId: args.pollId,
+    answerPoll: async (_parent: any, args: any, context: any, _info: any) => {
+      if (false) {
+        return prisma.answer.upsert({
+          where: {
+            user_poll_unique_constraint: {
+              userId: context.session?.user.userId
+                ? context.session?.user.userId
+                : 1,
+              pollId: args.pollId,
+            },
           },
-        },
-        update: {
-          optionId: args.optionId,
-        },
-        create: {
+          update: {
+            optionId: args.optionId,
+          },
+          create: {
+            pollId: args.pollId,
+            optionId: args.optionId,
+            userId: context.session?.user.userId,
+          },
+        });
+      }
+      return prisma.answer.create({
+        data: {
           pollId: args.pollId,
           optionId: args.optionId,
-          userId: context.session?.user.userId
-            ? context.session?.user.userId
-            : 1,
         },
-      }),
+      });
+    },
   },
 };
 
