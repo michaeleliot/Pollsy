@@ -7,11 +7,16 @@ import { useApollo } from '../../lib/apolloClient';
 function MyApp({ Component, pageProps }: AppProps) {
   const apolloClient = useApollo(pageProps.initialApolloState);
   return (
-    <ApolloProvider client={apolloClient}>
-      <Provider session={pageProps.session}>
-        <Component {...pageProps} />
-      </Provider>
-    </ApolloProvider>
+    <>
+      <head>
+        <title>Pollsy</title>
+      </head>
+      <ApolloProvider client={apolloClient}>
+        <Provider session={pageProps.session}>
+          <Component {...pageProps} />
+        </Provider>
+      </ApolloProvider>
+    </>
   );
 }
 
