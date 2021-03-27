@@ -27,7 +27,8 @@ export default function HomePage({
     <>
       <div className="flex justify-between p-5">
         <div className="flex gap-5">
-          {session.user.email} <br />
+          <Link href="/">Pollsy</Link>
+          <Link href="/mine">{session.user.email}</Link>
           <button
             type="button"
             className="text-gray-600"
