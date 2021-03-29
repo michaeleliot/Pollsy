@@ -1,6 +1,6 @@
 import { Poll } from '@prisma/client';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import PollView from './PollView';
+import PollState from './PollState';
 
 export default function PollsView({
   polls,
@@ -29,7 +29,7 @@ export default function PollsView({
       }
     >
       {polls.map((poll: Poll) => (
-        <PollView
+        <PollState
           key={poll.id}
           poll={poll}
           mine={mine}

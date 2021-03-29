@@ -1,59 +1,19 @@
-import { useForm } from 'react-hook-form';
-import { useMutation } from '@apollo/client';
-import { useState } from 'react';
 import Link from 'next/link';
-import { ANSWER_POLL, DELETE_POLL } from '../../graphql/queries';
+import { Poll, Option } from '@prisma/client';
 
 export default function PollView({
   poll,
   mine,
-  removeFromList,
+  options,
+  onDelete,
+  onAnswer,
 }: {
-  poll: any;
+  poll: Poll;
+  options: Option[];
   mine: boolean;
-  removeFromList: (pollId: string) => void;
+  onDelete: any;
+  onAnswer: any;
 }) {
-  const [answerPoll, { data, error = { graphQLErrors: [] } }] = useMutation(
-    ANSWER_POLL,
-  );
-  const [deletePoll] = useMutation(DELETE_POLL);
-  const [options, setOptions] = useState(poll.options);
-  const onPollDelete = () => {
-    deletePoll({
-      variables: {
-        pollId: poll.id,
-      },
-    });
-    removeFromList(poll.id);
-  };
-  const onSubmit = (optionId: string) => {
-    answerPoll({
-      variables: {
-        optionId,
-        pollId: poll.id,
-      },
-    }).catch((err) => console.log(err));
-    const tempOptions = options.slice();
-    const oldSelection = tempOptions.findIndex(
-      (option: any) => option.selected,
-    );
-    const newSelection = tempOptions.findIndex(
-      (option: any) => option.id === optionId,
-    );
-    if (oldSelection !== -1) {
-      tempOptions[oldSelection] = {
-        ...tempOptions[oldSelection],
-        selected: false,
-        votes: tempOptions[oldSelection].votes - 1,
-      };
-    }
-    tempOptions[newSelection] = {
-      ...tempOptions[newSelection],
-      selected: true,
-      votes: tempOptions[newSelection].votes + 1,
-    };
-    setOptions(tempOptions);
-  };
   const reducer = (accumulator: any, currentValue: any) =>
     accumulator + currentValue.votes;
   const sum = options.reduce(reducer, 0);
@@ -66,7 +26,7 @@ export default function PollView({
         {`${poll.title}: ${poll.description}`}
       </Link>
       <form>
-        {options.map((option: any) => (
+        {options.map((option: Option) => (
           <div
             key={`option-${option.id}`}
             className="relative bg-gray-100 m-1 w-100 h-100 rounded-lg z-30"
@@ -79,7 +39,7 @@ export default function PollView({
                 type="radio"
                 value={option.id}
                 defaultChecked={option.selected}
-                onClick={() => onSubmit(option.id)}
+                onClick={() => onAnswer(option.id)}
               />
               <label
                 htmlFor={option.id}
@@ -95,7 +55,7 @@ export default function PollView({
         ))}
       </form>
       {mine && (
-        <button type="button" onClick={() => onPollDelete()}>
+        <button type="button" onClick={() => onDelete()}>
           Delete Poll
         </button>
       )}
