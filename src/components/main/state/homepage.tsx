@@ -43,7 +43,7 @@ export default function HomePage({
           </Link>
         </div>
       </div>
-      <PollListView data={polls} fetchMore={fetchMore} />
+      <PollListView data={polls} fetchMore={fetchMore} mine={mine} />
     </>
   );
 }

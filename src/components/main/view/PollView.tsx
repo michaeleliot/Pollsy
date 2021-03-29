@@ -2,13 +2,21 @@ import { useForm } from 'react-hook-form';
 import { useMutation } from '@apollo/client';
 import { useState } from 'react';
 import Link from 'next/link';
-import { ANSWER_POLL } from '../../graphql/queries';
+import { ANSWER_POLL, DELETE_POLL } from '../../graphql/queries';
 
-export default function PollView({ poll }: { poll: any }) {
+export default function PollView({ poll, mine }: { poll: any; mine: boolean }) {
   const [answerPoll, { data, error = { graphQLErrors: [] } }] = useMutation(
     ANSWER_POLL,
   );
+  const [deletePoll] = useMutation(DELETE_POLL);
   const [options, setOptions] = useState(poll.options);
+  const onDelete = () => {
+    deletePoll({
+      variables: {
+        pollId: poll.id,
+      },
+    });
+  };
   const onSubmit = (optionId: string) => {
     answerPoll({
       variables: {
@@ -40,7 +48,6 @@ export default function PollView({ poll }: { poll: any }) {
   const reducer = (accumulator: any, currentValue: any) =>
     accumulator + currentValue.votes;
   const sum = options.reduce(reducer, 0);
-
   return (
     <div
       key={`poll-${poll.id}`}
@@ -78,6 +85,11 @@ export default function PollView({ poll }: { poll: any }) {
           </div>
         ))}
       </form>
+      {mine && (
+        <button type="button" onClick={() => onDelete()}>
+          Delete Poll
+        </button>
+      )}
     </div>
   );
 }

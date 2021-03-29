@@ -41,6 +41,7 @@ export const typeDefs = gql`
       privacy: Privacy
       options: [OptionInput]
     ): Poll
+    deletePoll(pollId: String!): Poll
     answerPoll(optionId: String!, pollId: String!): Answer
     clearPolls: [Poll]
   }
@@ -127,6 +128,14 @@ export const ANSWER_POLL = gql`
       option {
         id
       }
+    }
+  }
+`;
+
+export const DELETE_POLL = gql`
+  mutation deletePoll($pollId: String!) {
+    deletePoll(pollId: $pollId) {
+      id
     }
   }
 `;

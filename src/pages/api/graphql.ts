@@ -1,4 +1,8 @@
-import { ApolloServer, UserInputError } from 'apollo-server-micro';
+import {
+  ApolloServer,
+  UserInputError,
+  ForbiddenError,
+} from 'apollo-server-micro';
 import { Option, PollPrivacy } from '@prisma/client';
 import { getSession } from 'next-auth/client';
 import { typeDefs } from '../../components/graphql/queries';
@@ -89,7 +93,7 @@ export const resolvers = {
         },
       }),
     answerPoll: async (_parent: any, args: any, context: any, _info: any) => {
-      if (false) {
+      if (context.session?.user.userId) {
         return prisma.answer.upsert({
           where: {
             user_poll_unique_constraint: {
@@ -115,6 +119,13 @@ export const resolvers = {
           optionId: args.optionId,
         },
       });
+    },
+    deletePoll: async (_parent: any, args: any, context: any, _info: any) => {
+      const poll = prisma.poll.findUnique({ where: { id: args.pollId } });
+      if (poll.userId === context.session?.user.userId) {
+        return prisma.$executeRaw`DELETE FROM "Poll" WHERE id=${args.pollId};`;
+      }
+      throw new ForbiddenError(`User cannot delete this poll.`);
     },
   },
 };
