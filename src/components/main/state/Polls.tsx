@@ -1,8 +1,8 @@
 import { Poll } from '@prisma/client';
 import { useState } from 'react';
-import PollsView from './PollsView';
+import PollsView from '../view/PollsView';
 
-export default function PollsState({
+export default function Polls({
   data,
   fetchData,
   mine,

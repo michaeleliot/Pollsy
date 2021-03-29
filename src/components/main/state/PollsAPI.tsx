@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/client';
 import { useState } from 'react';
 import { GET_POLLS } from '../../graphql/queries';
-import PollsState from './PollsState';
+import Polls from './Polls';
 
 export default function PollsAPI({ mine }: { mine: boolean }) {
   const { loading, error, data, fetchMore } = useQuery(GET_POLLS, {
@@ -25,7 +25,7 @@ export default function PollsAPI({ mine }: { mine: boolean }) {
     }).then((req: any) => setHasMore(!!req.data.getPolls.length));
 
   return (
-    <PollsState
+    <Polls
       data={data.getPolls}
       fetchData={fetchData}
       hasMore={hasMore}

@@ -1,4 +1,4 @@
-import PollsAPI from '../view/PollsAPI';
+import PollsAPI from './PollsAPI';
 import TopBar from '../view/TopBar';
 
 export default function HomePage({

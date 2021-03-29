@@ -1,6 +1,6 @@
 import { useMutation } from '@apollo/client';
 import { useState } from 'react';
-import PollView from './PollView';
+import PollView from '../view/PollView';
 import { ANSWER_POLL, DELETE_POLL } from '../../graphql/queries';
 
 export default function PollState({
