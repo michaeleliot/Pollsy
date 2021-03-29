@@ -12,6 +12,10 @@ export default function PollListView({
   fetchMore: any;
   mine: boolean;
 }) {
+  const [polls, setPolls] = useState(data);
+  const removeFromList = (pollId: string) =>
+    setPolls(polls.filter((poll: Poll) => poll.id !== pollId));
+
   const [hasMore, setHasMore] = useState(true);
   const fetchData = () =>
     fetchMore({
@@ -20,9 +24,10 @@ export default function PollListView({
         limit: 3,
       },
     }).then((req: any) => setHasMore(!!req.data.getPolls.length));
+
   return (
     <InfiniteScroll
-      dataLength={data.length} // This is important field to render the next data
+      dataLength={polls.length} // This is important field to render the next data
       next={fetchData}
       hasMore={hasMore}
       loader={<h4>Loading...</h4>}
@@ -33,8 +38,13 @@ export default function PollListView({
         </p>
       }
     >
-      {data.map((poll: Poll) => (
-        <PollView key={poll.id} poll={poll} mine={mine} />
+      {polls.map((poll: Poll) => (
+        <PollView
+          key={poll.id}
+          poll={poll}
+          mine={mine}
+          removeFromList={removeFromList}
+        />
       ))}
     </InfiniteScroll>
   );

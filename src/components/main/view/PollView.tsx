@@ -4,18 +4,27 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { ANSWER_POLL, DELETE_POLL } from '../../graphql/queries';
 
-export default function PollView({ poll, mine }: { poll: any; mine: boolean }) {
+export default function PollView({
+  poll,
+  mine,
+  removeFromList,
+}: {
+  poll: any;
+  mine: boolean;
+  removeFromList: (pollId: string) => void;
+}) {
   const [answerPoll, { data, error = { graphQLErrors: [] } }] = useMutation(
     ANSWER_POLL,
   );
   const [deletePoll] = useMutation(DELETE_POLL);
   const [options, setOptions] = useState(poll.options);
-  const onDelete = () => {
+  const onPollDelete = () => {
     deletePoll({
       variables: {
         pollId: poll.id,
       },
     });
+    removeFromList(poll.id);
   };
   const onSubmit = (optionId: string) => {
     answerPoll({
@@ -86,7 +95,7 @@ export default function PollView({ poll, mine }: { poll: any; mine: boolean }) {
         ))}
       </form>
       {mine && (
-        <button type="button" onClick={() => onDelete()}>
+        <button type="button" onClick={() => onPollDelete()}>
           Delete Poll
         </button>
       )}

@@ -22,7 +22,6 @@ export default function HomePage({
   if (error) return <div>Error getting polls.</div>;
   if (loading) return <div>Loading</div>;
 
-  const polls = data.getPolls;
   return (
     <>
       <div className="flex justify-between p-5">
@@ -43,7 +42,7 @@ export default function HomePage({
           </Link>
         </div>
       </div>
-      <PollListView data={polls} fetchMore={fetchMore} mine={mine} />
+      <PollListView data={data.getPolls} fetchMore={fetchMore} mine={mine} />
     </>
   );
 }
