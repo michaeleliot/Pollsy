@@ -1,30 +1,20 @@
-import { Poll, Option } from '@prisma/client';
+import { Poll } from '@prisma/client';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { useState } from 'react';
 import PollView from './PollView';
 
-export default function PollListView({
-  data,
-  fetchMore,
+export default function PollsView({
+  polls,
+  fetchData,
+  hasMore,
   mine,
+  removeFromList,
 }: {
-  data: Poll[];
-  fetchMore: any;
+  polls: Poll[];
+  fetchData: any;
+  hasMore: boolean;
   mine: boolean;
+  removeFromList: any;
 }) {
-  const [polls, setPolls] = useState(data);
-  const removeFromList = (pollId: string) =>
-    setPolls(polls.filter((poll: Poll) => poll.id !== pollId));
-
-  const [hasMore, setHasMore] = useState(true);
-  const fetchData = () =>
-    fetchMore({
-      variables: {
-        offset: data.length,
-        limit: 3,
-      },
-    }).then((req: any) => setHasMore(!!req.data.getPolls.length));
-
   return (
     <InfiniteScroll
       dataLength={polls.length} // This is important field to render the next data

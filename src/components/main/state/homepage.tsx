@@ -1,8 +1,5 @@
-import { useQuery } from '@apollo/client';
-import Link from 'next/link';
-import { signOut } from 'next-auth/client';
-import { GET_POLLS } from '../../graphql/queries';
-import PollListView from '../view/PollListView';
+import PollsAPI from '../view/PollsAPI';
+import TopBar from '../view/TopBar';
 
 export default function HomePage({
   session,
@@ -11,38 +8,10 @@ export default function HomePage({
   session: any;
   mine: boolean;
 }) {
-  const { loading, error, data, fetchMore } = useQuery(GET_POLLS, {
-    variables: {
-      offset: 0,
-      limit: 20,
-      mine,
-    },
-  });
-
-  if (error) return <div>Error getting polls.</div>;
-  if (loading) return <div>Loading</div>;
-
   return (
     <>
-      <div className="flex justify-between p-5">
-        <div className="flex gap-5">
-          <Link href="/">Pollsy</Link>
-          <Link href="/mine">{session.user.email}</Link>
-          <button
-            type="button"
-            className="text-gray-600"
-            onClick={() => signOut()}
-          >
-            Sign out
-          </button>
-        </div>
-        <div>
-          <Link href="/create">
-            <a>Create a poll!</a>
-          </Link>
-        </div>
-      </div>
-      <PollListView data={data.getPolls} fetchMore={fetchMore} mine={mine} />
+      <TopBar email={session.user.email} />
+      <PollsAPI mine={mine} />
     </>
   );
 }
