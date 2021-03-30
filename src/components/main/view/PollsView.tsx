@@ -7,13 +7,11 @@ export default function PollsView({
   fetchData,
   hasMore,
   mine,
-  removeFromList,
 }: {
   polls: PollType[];
   fetchData: any;
   hasMore: boolean;
   mine: boolean;
-  removeFromList: any;
 }) {
   return (
     <InfiniteScroll
@@ -29,12 +27,7 @@ export default function PollsView({
       }
     >
       {polls.map((poll: PollType) => (
-        <Poll
-          key={poll.id}
-          poll={poll}
-          mine={mine}
-          removeFromList={removeFromList}
-        />
+        <Poll key={poll.id} poll={poll} mine={mine} />
       ))}
     </InfiniteScroll>
   );

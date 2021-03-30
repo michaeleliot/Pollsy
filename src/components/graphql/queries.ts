@@ -1,5 +1,11 @@
 import { gql } from '@apollo/client';
 
+export const GET_DELETED_POLLS = gql`
+  query GetDeletedPolls {
+    deleted @client
+  }
+`;
+
 export const GET_POLLS = gql`
   query getPolls($offset: Int, $limit: Int, $mine: Boolean) {
     getPolls(offset: $offset, limit: $limit, mine: $mine) {

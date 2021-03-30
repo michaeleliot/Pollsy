@@ -1,6 +1,7 @@
 import { Poll } from '@prisma/client';
-import { useState } from 'react';
+import { useReactiveVar } from '@apollo/client';
 import PollsView from '../view/PollsView';
+import { deletedVar } from '../../../../lib/apolloClient';
 
 export default function Polls({
   data,
@@ -13,16 +14,12 @@ export default function Polls({
   fetchData: any;
   hasMore: boolean;
 }) {
-  const [polls, setPolls] = useState(data);
-
-  const removeFromList = (pollId: string) =>
-    setPolls(polls.filter((poll: Poll) => poll.id !== pollId));
+  const deletedItems = useReactiveVar(deletedVar);
 
   return (
     <PollsView
-      polls={polls}
+      polls={data.filter((poll) => !deletedItems[poll.id])}
       fetchData={fetchData}
-      removeFromList={removeFromList}
       hasMore={hasMore}
       mine={mine}
     />

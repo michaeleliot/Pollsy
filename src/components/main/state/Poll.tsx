@@ -2,15 +2,14 @@ import { useMutation } from '@apollo/client';
 import { useState } from 'react';
 import PollView from '../view/PollView';
 import { ANSWER_POLL, DELETE_POLL } from '../../graphql/queries';
+import { deletedVar } from '../../../../lib/apolloClient';
 
 export default function PollState({
   poll,
   mine,
-  removeFromList,
 }: {
   poll: any;
   mine: boolean;
-  removeFromList: (pollId: string) => void;
 }) {
   const [answerPoll] = useMutation(ANSWER_POLL);
   const [deletePoll] = useMutation(DELETE_POLL);
@@ -23,7 +22,10 @@ export default function PollState({
         pollId: poll.id,
       },
     });
-    removeFromList(poll.id);
+    deletedVar({
+      ...deletedVar(),
+      [poll.id]: true,
+    });
   };
   const onAnswer = (optionId: string) => {
     answerPoll({

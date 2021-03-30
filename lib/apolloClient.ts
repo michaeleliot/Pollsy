@@ -1,12 +1,19 @@
 import { useMemo } from "react";
-import { ApolloClient, HttpLink, InMemoryCache } from "@apollo/client";
+import { ApolloClient, HttpLink, InMemoryCache, makeVar } from "@apollo/client";
 
 let apolloClient: ApolloClient<InMemoryCache>;
 
-const cache = new InMemoryCache({
+export const deletedVar = makeVar({});
+
+export const cache = new InMemoryCache({
   typePolicies: {
     Query: {
       fields: {
+        deletedVar: {
+          read() {
+            return deletedVar();
+          }
+        },
         getPolls: {
           keyArgs: false,
           merge(existing = [], incoming, { args: { offset = 0 }}) {
