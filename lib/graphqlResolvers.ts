@@ -16,7 +16,7 @@ export const resolvers = {
       prisma.user.findUnique({ where: { email: context.session.user.email } }),
     getPolls: async (_parent: any, args: any, context: any, _info: any) => {
       const userId = context.session?.user?.userId ?? 1;
-      const where = args.mine ? { userId } : { privacy: PollPrivacy.PUBLIC };
+      const where = { userId };
       let polls = await prisma.poll.findMany({
         skip: args.offset,
         take: args.limit,
@@ -32,7 +32,6 @@ export const resolvers = {
       // TODO Have this filtering done in the sql request can use prisma raw call
       polls = polls.map((poll) => {
         const poll_copy = poll;
-        poll_copy.mine = userId == poll.userId
         poll_copy.options = poll.options.map((option: Option) => {
           const option_copy: any = option;
           option_copy.votes = option_copy.answers.length;

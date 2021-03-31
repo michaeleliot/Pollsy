@@ -13,7 +13,6 @@ model Poll {
   title       String
   description String
   userId      Int
-  privacy     PollPrivacy @default(PUBLIC)
   user        User        @relation(fields: [userId], references: [id])
   Answer      Answer[]
   options     Option[]
@@ -94,10 +93,4 @@ model VerificationRequest {
   updatedAt  DateTime @default(now()) @map("updated_at")
 
   @@map("verification_requests")
-}
-
-enum PollPrivacy {
-  PUBLIC
-  LINKED
-  PRIVATE
 }

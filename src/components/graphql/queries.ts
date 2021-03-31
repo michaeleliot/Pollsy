@@ -7,13 +7,12 @@ export const GET_DELETED_POLLS = gql`
 `;
 
 export const GET_POLLS = gql`
-  query getPolls($offset: Int, $limit: Int, $mine: Boolean) {
-    getPolls(offset: $offset, limit: $limit, mine: $mine) {
+  query getPolls($offset: Int, $limit: Int) {
+    getPolls(offset: $offset, limit: $limit) {
       id
       title
       description
       privacy
-      mine
       options {
         id
         description

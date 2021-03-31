@@ -2,7 +2,7 @@ import { useSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
 import { useQuery } from '@apollo/client';
 import Link from 'next/link';
-import PollView from '../../components/main/view/PollView';
+import Poll from '../../components/main/state/Poll';
 import { GET_POLL } from '../../components/graphql/queries';
 import SignInRedirect from '../../components/main/view/SignInPage';
 
@@ -24,7 +24,7 @@ export default function Page() {
 
   return session ? (
     <div>
-      <PollView poll={data.getPoll} />
+      <Poll poll={data.getPoll} />
       <Link href="/">
         <a>Back to the Homepage</a>
       </Link>

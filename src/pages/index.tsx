@@ -9,8 +9,8 @@ export default function Page() {
 
   return session ? (
     <>
-      <TopBar email={session.user.email as string} />
-      <Polls mine={false} />
+      <TopBar name={session.user.name as string} />
+      <Polls />
     </>
   ) : (
     <SignInRedirect />

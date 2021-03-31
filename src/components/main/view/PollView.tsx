@@ -52,11 +52,9 @@ export default function PollView({
           </div>
         ))}
       </form>
-      {poll.mine && (
-        <button type="button" onClick={() => onDelete()}>
-          Delete Poll
-        </button>
-      )}
+      <button type="button" onClick={() => onDelete()}>
+        Delete Poll
+      </button>
     </div>
   );
 }

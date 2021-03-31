@@ -3,15 +3,13 @@ import { useReactiveVar, useQuery } from '@apollo/client';
 import { useState } from 'react';
 import PollsView from '../view/PollsView';
 import { deletedVar } from '../../../../lib/apolloClient';
-
 import { GET_POLLS } from '../../graphql/queries';
 
-export default function Polls({ mine }: { mine: boolean }) {
+export default function Polls() {
   const { loading, error, data, fetchMore } = useQuery(GET_POLLS, {
     variables: {
       offset: 0,
       limit: 20,
-      mine,
     },
   });
   const [hasMore, setHasMore] = useState(true);
@@ -29,10 +27,7 @@ export default function Polls({ mine }: { mine: boolean }) {
     }).then((req: any) => setHasMore(!!req.data.getPolls.length));
 
   let polls = data.getPolls;
-  polls = polls.filter((poll) => !deletedItems[poll.id]);
-  if (mine) {
-    polls = polls.filter((poll) => poll.mine);
-  }
+  polls = polls.filter((poll: Poll) => !deletedItems[poll.id]);
 
   return <PollsView polls={polls} fetchData={fetchData} hasMore={hasMore} />;
 }
