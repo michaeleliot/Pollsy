@@ -4,7 +4,7 @@ import PollView from '../view/PollView';
 import { ANSWER_POLL, DELETE_POLL } from '../../graphql/queries';
 import { deletedVar } from '../../../../lib/apolloClient';
 
-export default function PollState({ poll }: { poll: any }) {
+export default function Poll({ poll }: { poll: any }) {
   const [answerPoll] = useMutation(ANSWER_POLL);
   const [deletePoll] = useMutation(DELETE_POLL);
 

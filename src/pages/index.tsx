@@ -3,7 +3,7 @@ import TopBar from '../components/main/view/TopBar';
 import Polls from '../components/main/state/Polls';
 import SignInRedirect from '../components/main/view/SignInPage';
 
-export default function Page() {
+export default function Index() {
   const [session, sessionLoading] = useSession();
   if (sessionLoading) return <div>Loading</div>;
 

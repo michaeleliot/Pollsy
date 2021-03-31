@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { signOut } from 'next-auth/client';
 
-export default function HomePage({ name }: { name: string }) {
+export default function TopBar({ name }: { name: string }) {
   return (
     <div className="flex justify-between p-5">
       <div className="flex gap-5">
