@@ -8,12 +8,16 @@ import CreateFormOptions from './CreateFormOptions';
 
 export default function CreateForm() {
   const router = useRouter();
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, errors } = useForm();
   const [createPoll, { data }] = useMutation(CREATE_POLL);
   const onSubmit = (poll: Poll) => {
-    createPoll({ variables: poll });
-    router.push(`/`);
+    if (!errors) {
+      createPoll({ variables: poll });
+      router.push(`/`);
+    }
   };
+
+  console.log(errors);
 
   return (
     <div className="w-full ">
@@ -24,27 +28,25 @@ export default function CreateForm() {
         Poll Creation Form
         <input
           name="title"
-          className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-          ref={register}
+          className={`appearance-none block w-full bg-gray-200 text-gray-700 border-2 ${
+            errors.title
+              ? `border-red-500 focus:border-red-500`
+              : `border-gray-200 focus:border-gray-500`
+          } rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white `}
+          ref={register({ required: true })}
           placeholder="Title"
         />
         <input
           name="description"
-          className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-          ref={register}
+          className={`appearance-none block w-full bg-gray-200 text-gray-700 border-2 ${
+            errors.description
+              ? `border-red-500 focus:border-red-500`
+              : `border-gray-200 focus:border-gray-500`
+          } rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white`}
+          ref={register({ required: true })}
           placeholder="Description"
         />
-        <select
-          name="privacy"
-          className="py-3 px-4 text-gray-700 bg-gray-200 border border-gray-200 rounded"
-          ref={register}
-          placeholder="Privacy"
-        >
-          <option value={PollPrivacy.PUBLIC}>Public</option>
-          <option value={PollPrivacy.PRIVATE}>Private</option>
-          <option value={PollPrivacy.LINKED}>Linked</option>
-        </select>
-        <CreateFormOptions register={register} />
+        <CreateFormOptions register={register} errors={errors} />
         <input type="submit" />
       </form>
       <Link href="/">
