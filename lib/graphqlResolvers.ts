@@ -32,6 +32,7 @@ export const resolvers = {
       // TODO Have this filtering done in the sql request can use prisma raw call
       polls = polls.map((poll) => {
         const poll_copy = poll;
+        poll_copy.mine = userId == poll.userId
         poll_copy.options = poll.options.map((option: Option) => {
           const option_copy: any = option;
           option_copy.votes = option_copy.answers.length;

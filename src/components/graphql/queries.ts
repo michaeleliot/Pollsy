@@ -13,6 +13,7 @@ export const GET_POLLS = gql`
       title
       description
       privacy
+      mine
       options {
         id
         description

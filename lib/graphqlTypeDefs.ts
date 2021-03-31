@@ -11,6 +11,7 @@ export const typeDefs = gql`
     description: String
     privacy: Privacy
     user: User
+    mine: Boolean
     options: [Option]
   }
   type Option {

@@ -1,5 +1,6 @@
 import { useSession } from 'next-auth/client';
-import HomePage from '../components/main/state/homepage';
+import TopBar from '../components/main/view/TopBar';
+import Polls from '../components/main/state/Polls';
 import SignInRedirect from '../components/main/view/SignInPage';
 
 export default function Page() {
@@ -7,7 +8,10 @@ export default function Page() {
   if (sessionLoading) return <div>Loading</div>;
 
   return session ? (
-    <HomePage session={session} mine={false} />
+    <>
+      <TopBar email={session.user.email as string} />
+      <Polls mine={false} />
+    </>
   ) : (
     <SignInRedirect />
   );

@@ -3,14 +3,12 @@ import { Poll, Option } from '@prisma/client';
 
 export default function PollView({
   poll,
-  mine,
   options,
   onDelete,
   onAnswer,
 }: {
   poll: Poll;
   options: Option[];
-  mine: boolean;
   onDelete: any;
   onAnswer: any;
 }) {
@@ -54,7 +52,7 @@ export default function PollView({
           </div>
         ))}
       </form>
-      {mine && (
+      {poll.mine && (
         <button type="button" onClick={() => onDelete()}>
           Delete Poll
         </button>
