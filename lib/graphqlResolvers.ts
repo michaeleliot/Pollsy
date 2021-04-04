@@ -15,7 +15,7 @@ export const resolvers = {
     ) =>
       prisma.user.findUnique({ where: { email: context.session.user.email } }),
     getPolls: async (_parent: any, args: any, context: any, _info: any) => {
-      const userId = context.session?.user?.userId ?? 1;
+      const userId = context.user.id ?? 1;
       const where = { userId };
       let polls = await prisma.poll.findMany({
         skip: args.offset,
@@ -46,7 +46,7 @@ export const resolvers = {
       return polls;
     },
     getPoll: async (_parent: any, args: any, context: any, _info: any) => {
-      const userId = context.session?.user?.userId ?? 1;
+      const userId = context.user ?? 1;
       const poll_copy = await prisma.poll.findUnique({
         where: { id: args.pollId },
         include: { options: { include: { answers: true } }, user: true },
@@ -77,8 +77,8 @@ export const resolvers = {
         data: {
           title: args.title,
           description: args.description,
-          userId: context.session?.user.userId
-            ? context.session?.user.userId
+          userId: context.user.id
+            ? context.user.id
             : 1,
           options: {
             create: args.options,
@@ -90,13 +90,12 @@ export const resolvers = {
         },
       }),
     answerPoll: async (_parent: any, args: any, context: any, _info: any) => {
-      if (context.session?.user.userId) {
-        return prisma.answer.upsert({
+      if (context.user.id) {
+        let answer = await 
+        prisma.answer.upsert({
           where: {
             user_poll_unique_constraint: {
-              userId: context.session?.user.userId
-                ? context.session?.user.userId
-                : 1,
+              userId: context.user.id,
               pollId: args.pollId,
             },
           },
@@ -106,9 +105,14 @@ export const resolvers = {
           create: {
             pollId: args.pollId,
             optionId: args.optionId,
-            userId: context.session?.user.userId,
+            userId: context.user.id,
           },
+          include: {
+            option: true
+          }
         });
+        console.log(answer)
+        return answer
       }
       return prisma.answer.create({
         data: {
@@ -119,7 +123,7 @@ export const resolvers = {
     },
     deletePoll: async (_parent: any, args: any, context: any, _info: any) => {
       const poll = prisma.poll.findUnique({ where: { id: args.pollId } });
-      if (poll.userId === context.session?.user.userId) {
+      if (poll.userId === context.user.id) {
         return prisma.$executeRaw`DELETE FROM "Poll" WHERE id=${args.pollId};`;
       }
       throw new ForbiddenError(`User cannot delete this poll.`);
