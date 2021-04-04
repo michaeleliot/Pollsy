@@ -11,7 +11,7 @@ export default function CreateForm() {
   const { register, handleSubmit, errors } = useForm();
   const [createPoll, { data }] = useMutation(CREATE_POLL);
   const onSubmit = (poll: Poll) => {
-    if (!errors) {
+    if (Object.keys(errors).length === 0) {
       createPoll({ variables: poll });
       router.push(`/`);
     }

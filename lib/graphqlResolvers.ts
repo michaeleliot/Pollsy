@@ -122,7 +122,7 @@ export const resolvers = {
       });
     },
     deletePoll: async (_parent: any, args: any, context: any, _info: any) => {
-      const poll = prisma.poll.findUnique({ where: { id: args.pollId } });
+      const poll = await prisma.poll.findUnique({ where: { id: args.pollId } });
       if (poll.userId === context.user.id) {
         return prisma.$executeRaw`DELETE FROM "Poll" WHERE id=${args.pollId};`;
       }
