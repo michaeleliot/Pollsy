@@ -1,10 +1,12 @@
-import { useSession } from 'next-auth/client';
+import { useSession, signIn } from 'next-auth/client';
 import CreateForm from '@/components/create/CreateForm';
-import SignInRedirect from '../components/main/view/SignInPage';
 
 export default function Create() {
   const [session, sessionLoading] = useSession();
   if (sessionLoading) return <div>Loading</div>;
-
-  return session ? <CreateForm /> : <SignInRedirect />;
+  if (!session) {
+    signIn();
+    return <div> Redirecting </div>;
+  }
+  return <CreateForm />;
 }

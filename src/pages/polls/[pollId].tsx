@@ -1,10 +1,9 @@
-import { useSession } from 'next-auth/client';
+import { useSession, signIn } from 'next-auth/client';
 import { useRouter } from 'next/router';
 import { useQuery } from '@apollo/client';
 import Link from 'next/link';
 import Poll from '../../components/main/state/Poll';
 import { GET_POLL } from '../../components/graphql/queries';
-import SignInRedirect from '../../components/main/view/SignInPage';
 
 export default function Page() {
   const router = useRouter();
@@ -12,6 +11,11 @@ export default function Page() {
 
   const [session, sessionLoading] = useSession();
   if (sessionLoading) return <div>Loading</div>;
+
+  if (!session) {
+    signIn();
+    return <div> Redirecting </div>;
+  }
 
   const { loading, error, data } = useQuery(GET_POLL, {
     variables: {
@@ -22,14 +26,12 @@ export default function Page() {
   if (error) return <div>Error getting poll.</div>;
   if (loading) return <div>Loading</div>;
 
-  return session ? (
+  return (
     <div>
       <Poll poll={data.getPoll} />
       <Link href="/">
         <a>Back to the Homepage</a>
       </Link>
     </div>
-  ) : (
-    <SignInRedirect />
   );
 }

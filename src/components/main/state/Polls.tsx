@@ -6,7 +6,7 @@ import { deletedVar } from '../../../../lib/apolloClient';
 import { GET_POLLS } from '../../graphql/queries';
 
 export default function Polls() {
-  const limit = 5;
+  const limit = 20;
   const { loading, error, data, fetchMore } = useQuery(GET_POLLS, {
     variables: {
       offset: 0,
@@ -25,10 +25,7 @@ export default function Polls() {
         offset: data.getPolls.length,
         limit,
       },
-    }).then((req: any) => {
-      console.log(req.data);
-      setHasMore(!!req.data.getPolls.length);
-    });
+    }).then((req: any) => setHasMore(!!req.data.getPolls.length));
 
   let polls = data.getPolls;
   polls = polls.filter((poll: Poll) => !deletedItems[poll.id]);
