@@ -7,7 +7,6 @@ export default function CreateFormOptions({
   register: any;
   errors: any;
 }) {
-  console.log(errors.options);
   const option_key = (option_number: number) =>
     `options[${option_number}].description`;
   const option_html = (option_number: number) => (

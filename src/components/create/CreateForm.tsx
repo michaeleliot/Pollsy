@@ -17,8 +17,6 @@ export default function CreateForm() {
     }
   };
 
-  console.log(errors);
-
   return (
     <div className="w-full ">
       <form
