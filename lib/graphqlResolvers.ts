@@ -2,7 +2,7 @@ import {
   UserInputError,
   ForbiddenError,
 } from 'apollo-server-micro';
-import { Option, PollPrivacy } from '@prisma/client';
+import { Option } from '@prisma/client';
 import prisma from './prismaClient';
 
 export const resolvers = {
@@ -82,8 +82,7 @@ export const resolvers = {
             : 1,
           options: {
             create: args.options,
-          },
-          privacy: args.privacy,
+          }
         },
         include: {
           options: true,
@@ -123,7 +122,7 @@ export const resolvers = {
     },
     deletePoll: async (_parent: any, args: any, context: any, _info: any) => {
       const poll = await prisma.poll.findUnique({ where: { id: args.pollId } });
-      if (poll.userId === context.user.id) {
+      if (poll && poll.userId === context.user.id) {
         return prisma.$executeRaw`DELETE FROM "Poll" WHERE id=${args.pollId};`;
       }
       throw new ForbiddenError(`User cannot delete this poll.`);

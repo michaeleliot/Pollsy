@@ -1,5 +1,5 @@
 import { useForm } from 'react-hook-form';
-import { Poll, PollPrivacy } from '@prisma/client';
+import { Poll } from '@prisma/client';
 import { useMutation } from '@apollo/client';
 import Link from 'next/link';
 import { useRouter } from 'next/router';

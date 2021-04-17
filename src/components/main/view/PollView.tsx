@@ -24,7 +24,7 @@ export default function PollView({
         {`${poll.title}: ${poll.description}`}
       </Link>
       <form>
-        {options.map((option: Option) => (
+        {options.map((option: any) => (
           <div
             key={`option-${option.id}`}
             className="relative bg-gray-100 m-1 w-100 h-100 rounded-lg z-30"

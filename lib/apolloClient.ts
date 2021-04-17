@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { ApolloClient, HttpLink, InMemoryCache, makeVar, useReactiveVar } from "@apollo/client";
+import { Poll } from "@prisma/client";
 
 let apolloClient: ApolloClient<InMemoryCache>;
 
@@ -16,9 +17,10 @@ export const cache = new InMemoryCache({
         },
         getPolls: {
           keyArgs: false,
-          merge(existing = [], incoming, { args: { offset = 0 }}) {
+          merge(existing = [], incoming, { args }) {
+            let { offset = 0 } = args as Record<string, any>
             let merged = existing ? existing.slice(0) : [];
-            const deletedItems = deletedVar();
+            const deletedItems = deletedVar() as Record<string, boolean>;
             merged = merged.filter((poll: Poll) => !deletedItems[poll.id]);
             for (let i = 0; i < incoming.length; ++i) {
               merged[offset + i] = incoming[i];

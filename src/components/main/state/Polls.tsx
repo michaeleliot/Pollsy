@@ -14,7 +14,7 @@ export default function Polls() {
     },
   });
   const [hasMore, setHasMore] = useState(true);
-  const deletedItems = useReactiveVar(deletedVar);
+  const deletedItems = useReactiveVar(deletedVar) as Record<string, boolean>;
 
   if (error) return <div>Error getting polls.</div>;
   if (loading) return <div>Loading</div>;
